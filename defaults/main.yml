@@ -1,0 +1,9 @@
+---
+postgresql_listen: "localhost"
+postgresql_databases: []
+postgresql_users: []
+postgresql_schemas: []
+postgresql_version:
+  bionic: "10"
+  xenial: "9.5"
+...
