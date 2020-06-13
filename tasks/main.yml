@@ -11,8 +11,9 @@
     cache_valid_time: 3600
   vars:
     packages:
-    - python-psycopg2
+    - python3-psycopg2
     - postgresql
+    - postgresql-client
     - postgresql-contrib
 
 - name: set config path
@@ -49,8 +50,9 @@
 
 - name: create user
   postgresql_user:
-    name: tfepuser
-    password: 1234test
+    name: "{{ item.name }}"
+    password: "{{ item.password }}"
+    state: "{{ item.state }}"
   become: yes
   become_user: postgres
   with_items: "{{ postgresql_users }}"
