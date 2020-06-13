@@ -28,6 +28,9 @@
     line: "listen_addresses = '{{ postgresql_listen }}'"
   notify: postgresql restart
 
+- name: restart postgresql
+  meta: flush_handlers
+
 - name: create all databases
   postgresql_db:
     encoding: "{{item.encoding|default(omit)}}"
