@@ -1,6 +1,6 @@
 ---
 
-- name: install necessary python package
+- name: install postgresql packages
   apt:
     name: "{{ packages }}"
     state: latest
