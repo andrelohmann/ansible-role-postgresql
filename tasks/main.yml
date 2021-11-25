@@ -15,6 +15,7 @@
     - postgresql
     - postgresql-client
     - postgresql-contrib
+    - acl
 
 - name: set config path
   set_fact:
