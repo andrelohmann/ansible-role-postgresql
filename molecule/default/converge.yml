@@ -1,9 +1,11 @@
 ---
-- hosts: localhost
-  become: true
-  become_method: sudo
+- name: Converge
+  hosts: all
   vars:
     postgresql_listen: "0.0.0.0"
+    postgresql_additional_packages:
+    - postgis
+    - osm2pgsql
     postgresql_databases:
     - name: test
       encoding: UTF-8
@@ -12,6 +14,11 @@
       - name: schemaone
         state: present
       - name: schematwo
+        state: present
+      extensions:
+      - name: postgis
+        state: present
+      - name: hstore
         state: present
     postgresql_users:
     - name: testuser
@@ -25,7 +32,8 @@
       - cidr: 0.0.0.0/0
         database: test
         state: present
-
-  roles:
-  - ansible-role-postgresql
+  tasks:
+  - name: "Include andrelohmann.postgresql"
+    include_role:
+      name: "andrelohmann.postgresql"
 ...
