@@ -17,7 +17,7 @@
     - postgresql-contrib
     - acl
 
-- name: Install additiona packages
+- name: Install additional packages
   ansible.builtin.apt:
     name: "{{ postgresql_additional_packages }}"
     state: present
@@ -101,7 +101,7 @@
   - "{{ postgresql_users }}"
   - privileges
 
-- name: Cet listen_addresses
+- name: Set listen_addresses
   ansible.builtin.lineinfile:
     path: "{{ _postgresql_config_path }}pg_hba.conf"
     regexp: "^host {{ item.1.database }} {{ item.0.name }} {{ item.1.cidr }} md5"
