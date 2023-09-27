@@ -9,7 +9,13 @@ vagrant_config = configs['configs']
 
 Vagrant.configure(2) do |config|
 
-  config.vagrant.plugins = ["vagrant-vbguest"]
+  config.vagrant.plugins = ["vagrant-vbguest", "vagrant-hostmanager"]
+
+  # hostmanager configuration
+  config.hostmanager.enabled = true
+  config.hostmanager.manage_host = true
+  config.hostmanager.manage_guest = true
+  config.hostmanager.include_offline = true
 
   config.vm.define "box" do |b|
 
@@ -20,6 +26,11 @@ Vagrant.configure(2) do |config|
       vb.cpus = vagrant_config['cpus']
       vb.customize ["modifyvm", :id, "--audio", "none"]
     end
+
+    # vagrant-hostmanager is necessary to update /etc/hosts on hosts and guests
+    b.vm.network "private_network", ip: vagrant_config['ip']
+    b.vm.hostname = vagrant_config['domain']
+    #b.hostmanager.aliases = vagrant_config['aliases']
 
     b.vm.synced_folder ".", "/vagrant", disabled: true
     b.vm.synced_folder ".", "/vagrant/ansible_vagrant", create: true, owner: "vagrant", group: "vagrant", mount_options: ["dmode=775,fmode=775"]
