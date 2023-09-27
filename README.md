@@ -37,6 +37,7 @@ The default set of variables can be used to provision databases, users and privi
     - name: testuser
       password: 1234test
       state: present
+      role_attr_flags: CREATEDB,NOSUPERUSER # allow user to create databases and schemas
       privileges:
       - database: test
         privs: "All"

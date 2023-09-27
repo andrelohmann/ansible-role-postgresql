@@ -81,6 +81,7 @@
     name: "{{ item.name }}"
     password: "{{ item.password }}"
     state: "{{ item.state }}"
+    role_attr_flags: "{{ item.role_attr_flags | default(omit) }}"
   become: true
   become_user: postgres
   with_items: "{{ postgresql_users }}"
