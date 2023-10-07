@@ -2,7 +2,6 @@
 galaxy_info:
   role_name: postgresql
   author: andrelohmann
-  namespace: andrelohmann
   description: ansible galaxy role to install postgresql and configure users, databases and access
   company: CloudSails GmbH
 
