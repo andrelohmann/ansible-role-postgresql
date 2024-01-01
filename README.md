@@ -4,7 +4,7 @@
 
 ## Content
 
-Use this role to provision postgresql
+Use this role to provision postgresql from the official postgresql repository
 
 ### Requirements
 
@@ -14,6 +14,7 @@ This role requires ubuntu
 
 The default set of variables can be used to provision databases, users and privileges and set the listen_addresses. If necessary, you can also install additional postgres packages.
 
+    postgresql_version: 16
     postgresql_listen: "0.0.0.0"
     postgresql_additional_packages:
     - postgis
