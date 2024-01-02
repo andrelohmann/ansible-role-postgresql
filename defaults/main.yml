@@ -1,8 +1,0 @@
----
-postgresql_version: 16
-postgresql_listen: "localhost"
-postgresql_additional_packages: []
-postgresql_databases: []
-postgresql_users: []
-postgresql_schemas: []
-...
