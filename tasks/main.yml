@@ -70,10 +70,21 @@
 - name: Restart postgresql
   ansible.builtin.meta: flush_handlers
 
+- name: Create user
+  community.postgresql.postgresql_user:
+    name: "{{ item.name }}"
+    password: "{{ item.password }}"
+    state: "{{ item.state }}"
+    role_attr_flags: "{{ item.role_attr_flags | default(omit) }}"
+  become: true
+  become_user: postgres
+  with_items: "{{ postgresql_users }}"
+
 - name: Create all databases
   community.postgresql.postgresql_db:
     encoding: "{{ item.encoding | default(omit) }}"
     name: "{{ item.name | default(omit) }}"
+    owner: "{{ item.owner | default(omit) }}"
     state: "{{ item.state | default(omit) }}"
   become: true
   become_user: postgres
@@ -103,16 +114,6 @@
   with_subelements:
   - "{{ postgresql_databases }}"
   - extensions
-
-- name: Create user
-  community.postgresql.postgresql_user:
-    name: "{{ item.name }}"
-    password: "{{ item.password }}"
-    state: "{{ item.state }}"
-    role_attr_flags: "{{ item.role_attr_flags | default(omit) }}"
-  become: true
-  become_user: postgres
-  with_items: "{{ postgresql_users }}"
 
 - name: Create privileges
   community.postgresql.postgresql_privs:

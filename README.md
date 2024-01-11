@@ -22,6 +22,7 @@ The default set of variables can be used to provision databases, users and privi
     postgresql_databases:
     - name: test
       encoding: UTF-8
+      owner: testuser
       state: present
       schemas:
       - name: schemaone
@@ -41,7 +42,7 @@ The default set of variables can be used to provision databases, users and privi
       role_attr_flags: CREATEDB,NOSUPERUSER # allow user to create databases and schemas
       privileges:
       - database: test
-        privs: "All"
+        privs: "ALL"
         state: present
       hosts:
       - cidr: 0.0.0.0/0

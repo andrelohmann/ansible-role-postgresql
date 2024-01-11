@@ -11,6 +11,7 @@
     postgresql_databases:
     - name: test
       encoding: UTF-8
+      owner: testuser
       state: present
       schemas:
       - name: schemaone
@@ -29,7 +30,7 @@
       role_attr_flags: CREATEDB,NOSUPERUSER
       privileges:
       - database: test
-        privs: "All"
+        privs: "ALL"
         state: present
       hosts:
       - cidr: localhost
