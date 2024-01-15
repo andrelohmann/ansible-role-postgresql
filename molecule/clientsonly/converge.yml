@@ -1,0 +1,11 @@
+---
+- name: Converge clientsonly
+  hosts: all
+  vars:
+    postgresql_listen: "0.0.0.0"
+    postgresql_clients_only: true
+  tasks:
+  - name: "Include andrelohmann.postgresql"
+    include_role:
+      name: "andrelohmann.postgresql"
+...

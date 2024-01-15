@@ -44,6 +44,23 @@
     - postgresql-client-{{ postgresql_version }}
     - postgresql-contrib-{{ postgresql_version }}
     - acl
+  when: not postgresql_clients_only
+
+- name: Install postgresql client packages only
+  ansible.builtin.apt:
+    name: "{{ packages }}"
+    state: present
+    dpkg_options: 'force-confnew,force-confdef'
+    autoclean: true
+    autoremove: true
+    update_cache: true
+    cache_valid_time: 3600
+  vars:
+    packages:
+    - python3-psycopg2
+    - postgresql-client-{{ postgresql_version }}
+    - acl
+  when: postgresql_clients_only
 
 - name: Install additional packages
   ansible.builtin.apt:
@@ -66,9 +83,11 @@
     insertafter: "^#listen_addresses ="
     line: "listen_addresses = '{{ postgresql_listen }}'"
   notify: Restart postgresql
+  when: not postgresql_clients_only
 
 - name: Restart postgresql
   ansible.builtin.meta: flush_handlers
+  when: not postgresql_clients_only
 
 - name: Create user
   community.postgresql.postgresql_user:
@@ -79,6 +98,7 @@
   become: true
   become_user: postgres
   with_items: "{{ postgresql_users }}"
+  when: not postgresql_clients_only
 
 - name: Create all databases
   community.postgresql.postgresql_db:
@@ -89,6 +109,7 @@
   become: true
   become_user: postgres
   with_items: "{{ postgresql_databases }}"
+  when: not postgresql_clients_only
 
 - name: Create schemas
   community.postgresql.postgresql_schema:
@@ -100,6 +121,7 @@
   with_subelements:
   - "{{ postgresql_databases }}"
   - schemas
+  when: not postgresql_clients_only
 
 - name: Create extensions
   community.postgresql.postgresql_ext:
@@ -114,6 +136,7 @@
   with_subelements:
   - "{{ postgresql_databases }}"
   - extensions
+  when: not postgresql_clients_only
 
 - name: Create privileges
   community.postgresql.postgresql_privs:
@@ -130,6 +153,7 @@
   with_subelements:
   - "{{ postgresql_users }}"
   - privileges
+  when: not postgresql_clients_only
 
 - name: Set listen_addresses
   ansible.builtin.lineinfile:
@@ -141,5 +165,6 @@
   - "{{ postgresql_users }}"
   - hosts
   notify: Restart postgresql
+  when: not postgresql_clients_only
 
 ...

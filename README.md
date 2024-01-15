@@ -16,6 +16,7 @@ The default set of variables can be used to provision databases, users and privi
 
     postgresql_version: 16
     postgresql_listen: "0.0.0.0"
+    postgresql_clients_only: false # Do install psql and pg_dump only
     postgresql_additional_packages:
     - postgis
     - osm2pgsql
@@ -121,7 +122,7 @@ code .
 yamllint .
 ansible-lint .
 molecule create
-molecule test
+molecule test --all
 ```
 
 #### Vagrant + Virtualbox
@@ -147,7 +148,7 @@ cd /etc/ansible/roles/ansible-role- [tab]
 yamllint .
 ansible-lint .
 molecule create
-molecule test
+molecule test --all
 ```
 
 ### Build and Release process
