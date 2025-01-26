@@ -14,7 +14,7 @@ This role requires ubuntu
 
 The default set of variables can be used to provision databases, users and privileges and set the listen_addresses. If necessary, you can also install additional postgres packages.
 
-    postgresql_version: 16
+    postgresql_version: 17
     postgresql_listen: "0.0.0.0"
     postgresql_clients_only: false # Do install psql and pg_dump only
     postgresql_additional_packages:
