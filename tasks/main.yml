@@ -44,6 +44,7 @@
     - postgresql-client-{{ postgresql_version }}
     - postgresql-contrib-{{ postgresql_version }}
     - acl
+    - postgis
   when: not postgresql_clients_only
 
 - name: Install postgresql client packages only

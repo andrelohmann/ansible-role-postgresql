@@ -1,5 +1,5 @@
 ---
-postgresql_version: 16
+postgresql_version: 17
 postgresql_listen: "localhost"
 postgresql_clients_only: false
 postgresql_additional_packages: []
