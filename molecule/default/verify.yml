@@ -7,12 +7,12 @@
   tasks:
 
   - name: postgresql restart
-    systemd:
+    ansible.builtin.systemd_service:
       name: postgresql
       state: restarted
 
   - name: Get Service Status
-    ansible.builtin.systemd:
+    ansible.builtin.systemd_service:
       name: "postgresql.service"
     register: pg_service_status
 

@@ -1,7 +1,8 @@
 ---
-- hosts: all
+- name: Install
+  hosts: all
   become: true
-  become_method: sudo
+  become_method: ansible.builtin.sudo
 
   vars:
     postgresql_listen: "0.0.0.0"
@@ -52,8 +53,8 @@
         state: present
 
   roles:
-  - andrelohmann.root_colored_prompt
-  - ansible-role-postgresql
+  - name: andrelohmann.root_colored_prompt
+  - name: ansible-role-postgresql
 
   tasks:
 
@@ -77,7 +78,7 @@
     register: adminer
 
   - name: Restart Apache2
-    ansible.builtin.systemd:
+    ansible.builtin.systemd_service:
       service: apache2
       state: restarted
     when: adminer.changed
