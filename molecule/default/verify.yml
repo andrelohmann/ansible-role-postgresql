@@ -6,7 +6,7 @@
   gather_facts: false
   tasks:
 
-  - name: postgresql restart
+  - name: Postgresql restart
     ansible.builtin.systemd_service:
       name: postgresql
       state: restarted
@@ -16,7 +16,7 @@
       name: "postgresql.service"
     register: pg_service_status
 
-  - name: dump postgresql service
+  - name: Dump postgresql service
     ansible.builtin.debug:
       var: pg_service_status
 
