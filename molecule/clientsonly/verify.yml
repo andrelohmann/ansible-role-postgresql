@@ -28,14 +28,14 @@
     ansible.builtin.debug:
       var: return_psql
 
-  - name: Assert pg_dump and psql to return Version 17.*
+  - name: Assert pg_dump and psql to return Version 18.*
     ansible.builtin.assert:
       that:
       - return_pg_dump.rc == 0
       - return_pg_dump.stdout is search('pg_dump')
-      - return_pg_dump.stdout is search('17.')
+      - return_pg_dump.stdout is search('18.')
       - return_psql.rc == 0
       - return_psql.stdout is search('psql')
-      - return_psql.stdout is search('17.')
+      - return_psql.stdout is search('18.')
 
 ...

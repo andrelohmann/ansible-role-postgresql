@@ -5,10 +5,11 @@
   become_method: ansible.builtin.sudo
 
   vars:
+    postgresql_version: 18
     postgresql_listen: "0.0.0.0"
-    postgresql_additional_packages:
-    - postgis
-    - osm2pgsql
+    postgresql_clients_only: true
+    # postgresql_additional_packages:
+    # - osm2pgsql
     postgresql_databases:
     - name: test
       encoding: UTF-8
@@ -53,8 +54,8 @@
         state: present
 
   roles:
-  - name: andrelohmann.root_colored_prompt
-  - name: ansible-role-postgresql
+  - role: andrelohmann.root_colored_prompt
+  - role: ansible-role-postgresql
 
   tasks:
 

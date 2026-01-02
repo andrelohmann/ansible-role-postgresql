@@ -18,15 +18,20 @@
 - name: APT | Install gpg key
   ansible.builtin.get_url:
     url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
-    dest: /etc/apt/trusted.gpg.d/pgdg.asc
+    dest: /etc/apt/keyrings/pgdg.asc
     mode: '0644'
     force: true
 
-- name: Apt | Add apt repository
-  ansible.builtin.apt_repository:
-    repo: "deb https://apt.postgresql.org/pub/repos/apt {{ ansible_distribution_release | lower }}-pgdg main"
-    state: present
-    filename: pgdg
+- name: Apt | Install postgresql repo
+  ansible.builtin.copy:
+    dest: /etc/apt/sources.list.d/docker.sources
+    content: |
+      Types: deb
+      URIs: https://apt.postgresql.org/pub/repos/apt
+      Suites: {{ ansible_facts["distribution_release"] | lower }}-pgdg
+      Components: main
+      Signed-By: /etc/apt/keyrings/pgdg.asc
+    mode: '0644'
 
 - name: Install postgresql packages
   ansible.builtin.apt:
@@ -36,15 +41,15 @@
     autoclean: true
     autoremove: true
     update_cache: true
-    cache_valid_time: 3600
   vars:
     packages:
     - python3-psycopg2
     - postgresql-{{ postgresql_version }}
     - postgresql-client-{{ postgresql_version }}
     - postgresql-contrib-{{ postgresql_version }}
+    - postgresql-{{ postgresql_version }}-postgis-3
+    - postgresql-{{ postgresql_version }}-postgis-3-scripts
     - acl
-    - postgis
   when: not postgresql_clients_only
 
 - name: Install postgresql client packages only
@@ -55,7 +60,6 @@
     autoclean: true
     autoremove: true
     update_cache: true
-    cache_valid_time: 3600
   vars:
     packages:
     - python3-psycopg2
@@ -114,7 +118,7 @@
 
 - name: Create schemas
   community.postgresql.postgresql_schema:
-    database: "{{ item.0.name }}"
+    login_db: "{{ item.0.name }}"
     name: "{{ item.1.name }}"
     state: "{{ item.1.state }}"
   become: true
@@ -126,7 +130,7 @@
 
 - name: Create extensions
   community.postgresql.postgresql_ext:
-    db: "{{ item.0.name }}"
+    login_db: "{{ item.0.name }}"
     name: "{{ item.1.name }}"
     state: "{{ item.1.state }}"
     cascade: "{{ item.1.cascade | default(omit) }}"
@@ -141,7 +145,7 @@
 
 - name: Create privileges
   community.postgresql.postgresql_privs:
-    database: "{{ item.1.database }}"
+    login_db: "{{ item.1.database }}"
     roles: "{{ item.0.name }}"
     state: "{{ item.1.state }}"
     privs: "{{ item.1.privs }}"
