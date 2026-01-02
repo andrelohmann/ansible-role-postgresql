@@ -4,10 +4,11 @@
   become: true
   become_method: ansible.builtin.sudo
   vars:
+    postgresql_version: 17
     postgresql_listen: "0.0.0.0"
-    postgresql_additional_packages:
-    - postgis
-    - osm2pgsql
+    # postgresql_additional_packages:
+    # - postgis
+    # - osm2pgsql
     postgresql_databases:
     - name: test
       encoding: UTF-8

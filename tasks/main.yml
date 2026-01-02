@@ -41,7 +41,6 @@
     autoclean: true
     autoremove: true
     update_cache: true
-    cache_valid_time: 3600
   vars:
     packages:
     - python3-psycopg2
@@ -61,7 +60,6 @@
     autoclean: true
     autoremove: true
     update_cache: true
-    cache_valid_time: 3600
   vars:
     packages:
     - python3-psycopg2
@@ -120,7 +118,7 @@
 
 - name: Create schemas
   community.postgresql.postgresql_schema:
-    database: "{{ item.0.name }}"
+    login_db: "{{ item.0.name }}"
     name: "{{ item.1.name }}"
     state: "{{ item.1.state }}"
   become: true
@@ -132,7 +130,7 @@
 
 - name: Create extensions
   community.postgresql.postgresql_ext:
-    db: "{{ item.0.name }}"
+    login_db: "{{ item.0.name }}"
     name: "{{ item.1.name }}"
     state: "{{ item.1.state }}"
     cascade: "{{ item.1.cascade | default(omit) }}"
@@ -147,7 +145,7 @@
 
 - name: Create privileges
   community.postgresql.postgresql_privs:
-    database: "{{ item.1.database }}"
+    login_db: "{{ item.1.database }}"
     roles: "{{ item.0.name }}"
     state: "{{ item.1.state }}"
     privs: "{{ item.1.privs }}"
