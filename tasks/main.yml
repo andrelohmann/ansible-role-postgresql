@@ -18,15 +18,20 @@
 - name: APT | Install gpg key
   ansible.builtin.get_url:
     url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
-    dest: /etc/apt/trusted.gpg.d/pgdg.asc
+    dest: /etc/apt/keyrings/pgdg.asc
     mode: '0644'
     force: true
 
-- name: Apt | Add apt repository
-  ansible.builtin.apt_repository:
-    repo: "deb https://apt.postgresql.org/pub/repos/apt {{ ansible_distribution_release | lower }}-pgdg main"
-    state: present
-    filename: pgdg
+- name: Apt | Install postgresql repo
+  ansible.builtin.copy:
+    dest: /etc/apt/sources.list.d/docker.sources
+    content: |
+      Types: deb
+      URIs: https://apt.postgresql.org/pub/repos/apt
+      Suites: {{ ansible_facts["distribution_release"] | lower }}-pgdg
+      Components: main
+      Signed-By: /etc/apt/keyrings/pgdg.asc
+    mode: '0644'
 
 - name: Install postgresql packages
   ansible.builtin.apt:
@@ -43,8 +48,9 @@
     - postgresql-{{ postgresql_version }}
     - postgresql-client-{{ postgresql_version }}
     - postgresql-contrib-{{ postgresql_version }}
+    - postgresql-{{ postgresql_version }}-postgis-3
+    - postgresql-{{ postgresql_version }}-postgis-3-scripts
     - acl
-    - postgis
   when: not postgresql_clients_only
 
 - name: Install postgresql client packages only
